@@ -1,0 +1,30 @@
+{
+  "name": "mine-server-pay",
+  "version": "1.0.0",
+  "description": "A simple nodejs + express + braintree payment server.",
+  "main": "index.js",
+  "scripts": {
+    "build": "npm i && npm start",
+    "start": "node index.js",
+    "dev": "env-cmd -f ./config/.env.dev nodemon --inspect index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@gitlab.com/s.casatorres/mine-server-pay.git"
+  },
+  "author": "Sergio Casatorres",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://gitlab.com/s.casatorres/mine-server-pay/issues"
+  },
+  "homepage": "https://gitlab.com/s.casatorres/mine-server-pay#readme",
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "helmet": "^3.21.3"
+  },
+  "devDependencies": {
+    "env-cmd": "^10.1.0",
+    "nodemon": "^2.0.2"
+  }
+}
