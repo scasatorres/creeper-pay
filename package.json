@@ -1,5 +1,5 @@
 {
-  "name": "mine-server-pay",
+  "name": "creeper-pay",
   "version": "1.0.0",
   "description": "A simple nodejs + express + braintree payment server.",
   "main": "index.js",
@@ -10,14 +10,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@gitlab.com/s.casatorres/mine-server-pay.git"
+    "url": "git+ssh://git@gitlab.com/s.casatorres/creeper-pay.git"
   },
   "author": "Sergio Casatorres",
   "license": "ISC",
   "bugs": {
-    "url": "https://gitlab.com/s.casatorres/mine-server-pay/issues"
+    "url": "https://gitlab.com/s.casatorres/creeper-pay/issues"
   },
-  "homepage": "https://gitlab.com/s.casatorres/mine-server-pay#readme",
+  "homepage": "https://gitlab.com/s.casatorres/creeper-pay#readme",
   "dependencies": {
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
