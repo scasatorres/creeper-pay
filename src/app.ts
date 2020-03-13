@@ -1,7 +1,7 @@
-const express = require('express');
-const helmet = require('helmet');
-const path = require('path');
-const mainRouter = require('./router/index');
+import express from 'express';
+import helmet from 'helmet';
+import path from 'path';
+import { mainRouter } from './router';
 
 const app = express();
 
@@ -15,4 +15,4 @@ app.use(express.json());
 
 app.use('/', mainRouter);
 
-module.exports = app;
+export { app };
