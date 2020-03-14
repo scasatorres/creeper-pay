@@ -22,7 +22,11 @@
     >
     <link
       rel="stylesheet"
-      href="/css/styles.css"
+      href="/css/shared.css"
+    >
+    <link
+      rel="stylesheet"
+      href="/css/error.css"
     >
     <title>Creeper Pay</title>
   </head>
@@ -30,12 +34,12 @@
   <body>
     {{>header}}
 
-    <main class="container error-container valign-wrapper">
+    <main class="error__container container valign-wrapper">
       <div class="row">
-        <div class="right col s12 m8">
+        <div class="error__text_container right col s12 m6">
           <p class="flow-text center-align">
-            <span class="error-title">{{ errorTitle }}</span>
-            <span class="error-message">{{ errorMessage }}</span>
+            <span class="error__title">{{ errorTitle }}</span>
+            <span class="error__message">{{ errorMessage }}</span>
           </p>
         </div>
         <div class="col s12 m4 valign-wrapper">
