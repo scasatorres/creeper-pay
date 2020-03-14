@@ -2,6 +2,7 @@ import express from 'express';
 import helmet from 'helmet';
 import path from 'path';
 import { mainRouter } from './router';
+require('./config/firebase');
 
 const app = express();
 

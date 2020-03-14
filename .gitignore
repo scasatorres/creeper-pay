@@ -116,3 +116,6 @@ ecosystem.config.*
 !.vscode/launch.json
 !.vscode/extensions.json
 *.code-workspace
+
+# Other
+google-app-credentials.*
