@@ -1,0 +1,34 @@
+<header>
+  <nav>
+    <div class="nav-wrapper green lighten-2">
+      <div class="row valign-wrapper">
+        <div class="col s2 valign-wrapper">
+          <a
+            href="#"
+            class="brand-logo"
+          >
+          </a>
+          <a
+            href="#"
+            data-target="mobile-menu"
+            class="sidenav-trigger"
+          >
+            <i class="material-icons">menu</i>
+          </a>
+        </div>
+        <div class="col s10">
+          <ul class="right hide-on-med-and-down">
+            {{>links}}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <ul
+    class="sidenav"
+    id="mobile-menu"
+  >
+    {{>links}}
+  </ul>
+</header>

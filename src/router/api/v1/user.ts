@@ -1,9 +1,9 @@
-import { Request } from './../models/extended-request';
+import { Request } from '../../../models/extended-request';
 import express, { NextFunction, Response } from 'express';
 import admin, { auth } from 'firebase-admin';
-import { User } from './../models/user';
-import { db } from '../config/firebase-admin';
-import { isAuthenticated } from '../middlewares/auth';
+import { User } from '../../../models/user';
+import { db } from '../../../config/firebase-admin';
+import { isAuthenticated } from '../../../middlewares/auth';
 
 const router = express.Router();
 
