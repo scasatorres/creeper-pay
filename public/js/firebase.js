@@ -1,15 +1,11 @@
-const firebase = require('firebase');
+const config = {
+  apiKey: 'AIzaSyDWDQWWU4L2s4xDY_adjb3XoVosJA1PZJE',
+  authDomain: 'creeper-pay.firebaseapp.com',
+  databaseURL: 'https://creeper-pay.firebaseio.com',
+  projectId: 'creeper-pay',
+  storageBucket: 'creeper-pay.appspot.com',
+  messagingSenderId: '604958475876',
+  appId: '1:604958475876:web:ca237ba25cb35c310a8171'
+}
 
-firebase.initializeApp({
-  apiKey: process.env.FIREBASE_API_KEY,
-  authDomain: process.env.FIREBASE_AUTH_DOMAIN,
-  databaseURL: process.env.FIREBASE_DATABASE_URL,
-  projectId: process.env.FIREBASE_PROJECT_ID,
-  storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
-  appId: process.env.FIREBASE_APP_ID
-});
-
-const auth = firebase.auth;
-
-module.exports = auth;
+firebase.initializeApp(config);

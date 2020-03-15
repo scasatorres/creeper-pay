@@ -49,7 +49,7 @@ main {
   display: flex;
   min-height: 100vh;
   flex-direction: column;
-  background-image: url(/img/water.jpg);
+  background-image: url(/img/water.png);
   background-repeat: repeat;
   background-size: 64px;
 }
@@ -63,6 +63,8 @@ main {
 
 .header__sidenav.sidenav li > a {
   color: #ffffff;
+  font-size: 1.64rem;
+  line-height: 110%;
 }
 
 .footer__container.page-footer {

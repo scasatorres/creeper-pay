@@ -36,7 +36,10 @@
 
     <main class="auth__container container valign-wrapper">
       <div class="row">
-        <form class="col s12 m6 offset-m3">
+        <form
+          id="login-form"
+          class="col s12 m6 offset-m3"
+        >
           {{!-- Card component --}}
           <div class="card z-depth-2">
             <div class="card-content">
@@ -49,6 +52,7 @@
                     id="email"
                     type="email"
                     class="validate"
+                    required
                   >
                   <label for="email">Email</label>
                 </div>
@@ -61,6 +65,7 @@
                     id="password"
                     type="password"
                     class="validate"
+                    required
                   >
                   <label for="password">Password</label>
                 </div>
@@ -68,6 +73,7 @@
             </div>
             <div class="card-action center-align">
               <button
+                id="login-button"
                 class="btn waves-effect waves-light green darken2"
                 type="submit"
                 name="action"
@@ -83,7 +89,14 @@
     {{>footer}}
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.11.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.11.0/firebase-auth.js"></script>
+
+    <script src="/scripts/validator/validator.min.js"></script>
+
+    <script src="/js/firebase.js"></script>
     <script src="/js/app.js"></script>
+    <script src="/js/login.js"></script>
   </body>
 
 </html>
