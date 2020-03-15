@@ -1,12 +1,12 @@
-.auth__container .row {
+.form__container .row {
   margin-bottom: 0;
 }
 
-.auth__container .card {
+.form__container .card {
   background-color: rgba(255, 255, 255, 0.85);
 }
 
-.auth__container .card-action {
+.form__container .card-action {
   border: 0;
   background-color: transparent;
 }

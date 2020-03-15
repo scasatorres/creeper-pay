@@ -4,9 +4,8 @@ admin.initializeApp({
   credential: admin.credential.cert(
     process.env.GOOGLE_APPLICATION_CREDENTIALS_PATH,
   ),
-  databaseURL: process.env.FIREBASE_DATABASE_URL,
 });
 
-const db = admin.database();
+const db = admin.firestore();
 
 export { db };

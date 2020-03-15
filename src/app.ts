@@ -1,5 +1,6 @@
 import express from 'express';
 import helmet from 'helmet';
+import cookieParser from 'cookie-parser';
 import hbs from 'hbs';
 import path from 'path';
 import { mainRouter } from './router';
@@ -18,6 +19,7 @@ hbs.registerPartials(partialsPath);
 app.use(express.static(publicDirPath));
 
 app.use(helmet());
+app.use(cookieParser(process.env.COOKIE_SECRET));
 app.use(express.json());
 
 app.use('/', mainRouter);

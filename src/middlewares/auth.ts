@@ -1,6 +1,8 @@
+import * as jwt from 'jsonwebtoken';
 import { NextFunction, Response } from 'express';
 import { Request } from './../models/extended-request';
 import admin from 'firebase-admin';
+import { UsersCollection, User } from '../models/user';
 
 const isAuthenticated = async (
   req: Request,
@@ -8,9 +10,27 @@ const isAuthenticated = async (
   next: NextFunction,
 ) => {
   try {
-    const token = req.header('Authorization').replace('Bearer ', '');
-    const decodedToken = await admin.auth().verifyIdToken(token);
+    const { token } = req.signedCookies;
 
+    if (!token) {
+      throw new Error('Please authenticate');
+    }
+
+    const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+
+    const userRecord = await admin.auth().getUser(decodedToken.uid);
+    const userDocument = await UsersCollection.doc(decodedToken.uid).get();
+
+    if (!userDocument.exists) {
+      throw new Error('User not exists!');
+    }
+
+    const user: User = {
+      ...(userDocument.data() as User),
+      email: userRecord.email,
+    };
+
+    req.user = user;
     req.uid = decodedToken.uid;
 
     next();

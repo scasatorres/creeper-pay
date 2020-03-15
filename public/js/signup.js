@@ -28,8 +28,9 @@ const onSubmit = async (e) => {
   try {
     const response = await axios.post(`${baseApiUrl}/users`, { username, email, password });
 
+    window.location.pathname = response.data.redirectUrl;
   } catch (error) {
-    validationInputs.forEach(($input) => toggleValidationStyles($input, false));
+    M.toast({ html: error, classes: 'red' });
   } finally {
     submitted = true;
   }

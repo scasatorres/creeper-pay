@@ -1,7 +1,8 @@
+import * as jwt from 'jsonwebtoken';
 import { Request } from '../../../models/extended-request';
-import express, { NextFunction, Response } from 'express';
+import express, { Response } from 'express';
 import admin, { auth } from 'firebase-admin';
-import { User } from '../../../models/user';
+import { User, UsersCollection } from '../../../models/user';
 import { db } from '../../../config/firebase-admin';
 import { isAuthenticated } from '../../../middlewares/auth';
 
@@ -10,15 +11,42 @@ const router = express.Router();
 router.post('/', async (req: Request, res: Response) => {
   try {
     const { username, email, password } = req.body;
+    const existingUser = await UsersCollection.where(
+      'username',
+      '==',
+      username,
+    ).get();
+
+    if (!existingUser.empty) {
+      throw new Error('Username already in use!');
+    }
+
+    const { uid } = await admin
+      .auth()
+      .createUser({ email, password, displayName: username });
+    const token = jwt.sign({ uid }, process.env.JWT_SECRET);
     const user: User = {
       username,
       email,
-      password,
+      paymentStatus: 'expired',
+      lastPaymentDate: null,
+      paymentExpirationDate: null,
     };
 
-    const userRecord = await admin.auth().createUser(user);
+    await UsersCollection.doc(uid).set(user);
 
-    res.status(200).send({ uid: userRecord.uid });
+    req.user = user;
+    req.uid = uid;
+
+    res.cookie(process.env.COOKIE_NAME, token, {
+      httpOnly: true,
+      signed: true,
+    });
+
+    return res.status(200).send({
+      user,
+      redirectUrl: '/views/users/profile',
+    });
   } catch (error) {
     return res.status(500).send(error);
   }
@@ -32,11 +60,32 @@ router.post('/login', async (req: Request, res: Response) => {
       throw new Error();
     }
 
-    const token = await admin.auth().createCustomToken(uid);
+    const userRecord = await admin.auth().getUser(uid);
+    const userDocument = await UsersCollection.doc(uid).get();
 
-    res.cookie('token', token, { httpOnly: true });
-    res.status(200).send({ redirectUrl: '/views/error' });
-    return;
+    if (!userDocument.exists) {
+      throw new Error('User not exists!');
+    }
+
+    const user: User = {
+      ...(userDocument.data() as User),
+      email: userRecord.email,
+    };
+
+    req.user = user;
+    req.uid = uid;
+
+    const token = jwt.sign({ uid }, process.env.JWT_SECRET);
+
+    res.cookie(process.env.COOKIE_NAME, token, {
+      httpOnly: true,
+      signed: true,
+    });
+
+    return res.status(200).send({
+      user,
+      redirectUrl: '/views/users/profile',
+    });
   } catch (error) {
     return res.status(400).send();
   }
@@ -44,9 +93,7 @@ router.post('/login', async (req: Request, res: Response) => {
 
 router.get('/me', isAuthenticated, async (req: Request, res: Response) => {
   try {
-    const userRecord = await admin.auth().getUser(req.uid);
-
-    res.status(200).send(userRecord);
+    return res.status(200).send(req.user);
   } catch (error) {
     return res.status(500).send(error);
   }

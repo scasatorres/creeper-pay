@@ -7,7 +7,7 @@
     "start": "node dist/index.js",
     "build": "npm i && npm run build:ts && npm start",
     "build:ts": "tsc",
-    "dev": "env-cmd -f .env nodemon --watch 'src/**/*' --watch 'public/**/*.(js|css)' --watch 'templates/**/*.hbs' -e ts,js,json,hbs,css --exec 'ts-node' ./src/index.ts"
+    "dev": "env-cmd -f .env nodemon --inspect src/index.ts"
   },
   "repository": {
     "type": "git",
@@ -21,6 +21,7 @@
   "homepage": "https://gitlab.com/s.casatorres/creeper-pay#readme",
   "dependencies": {
     "braintree": "^2.22.0",
+    "cookie-parser": "^1.4.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "firebase": "^7.11.0",
@@ -28,6 +29,7 @@
     "got": "^10.6.0",
     "hbs": "^4.1.0",
     "helmet": "^3.21.3",
+    "jsonwebtoken": "^8.5.1",
     "validator": "^12.2.0"
   },
   "devDependencies": {
