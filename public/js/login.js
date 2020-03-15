@@ -1,8 +1,11 @@
 // Elements
 const $loginForm = document.querySelector('#login-form');
-const $emailFormInput = $loginForm.querySelector('#email');
-const $passwordFormInput = $loginForm.querySelector('#password');
-const $loginButton = $loginForm.querySelector('#login-button');
+const $emailFormInput = $loginForm.elements['email'];
+const $passwordFormInput = $loginForm.elements['password'];
+const $loginButton = $loginForm.elements['submit-button'];
+
+const $emailHelperText = $loginForm.querySelector('#email-helper-text');
+const $passwordHelperText = $loginForm.querySelector('#password-helper-text');
 
 let submitted = false;
 const validationInputs = [
@@ -12,37 +15,6 @@ const validationInputs = [
 
 $loginButton.setAttribute('disabled', 'disabled');
 
-const isFormValid = () => {
-  return $loginForm.checkValidity();
-};
-
-const toggleValidationStyles = ($element, isValid) => {
-  if (!isValid) {
-    $element.classList.remove('valid');
-    $element.classList.add('invalid');
-  } else {
-    $element.classList.remove('invalid');
-    $element.classList.add('valid');
-  }
-}
-
-const onInputChange = (e) => {
-  const valid = isFormValid();
-
-  if (!submitted) {
-    const $element = e.target;
-    toggleValidationStyles($element, $element.checkValidity());
-  } else {
-    validationInputs.forEach(($input) => toggleValidationStyles($input, $input.checkValidity()));
-  }
-
-  if (!valid) {
-    return $loginButton.setAttribute('disabled', 'disabled');
-  }
-
-  $loginButton.removeAttribute('disabled');
-};
-
 const onSubmit = async (e) => {
   e.preventDefault();
 
@@ -50,7 +22,10 @@ const onSubmit = async (e) => {
   const password = $passwordFormInput.value;
 
   try {
-    const response = await firebase.auth().signInWithEmailAndPassword(email, password);
+    const firebaseResponse = await firebase.auth().signInWithEmailAndPassword(email, password);
+    const serverResponse = await axios.post(`${baseApiUrl}/users/login`, { uid: firebaseResponse.user.uid });
+
+    window.location.pathname = serverResponse.data.redirectUrl;
   } catch (error) {
     validationInputs.forEach(($input) => toggleValidationStyles($input, false));
 
@@ -61,6 +36,10 @@ const onSubmit = async (e) => {
 };
 
 // Listeners
-$emailFormInput.addEventListener('input', onInputChange.bind(this));
-$passwordFormInput.addEventListener('input', onInputChange.bind(this));
+$emailFormInput.addEventListener('input', onInputChange.bind(this, submitted, (errorMessage) => {
+  $emailHelperText.setAttribute('data-error', errorMessage);
+}));
+$passwordFormInput.addEventListener('input', onInputChange.bind(this, submitted, (errorMessage) => {
+  $passwordHelperText.setAttribute('data-error', errorMessage);
+}));
 $loginForm.addEventListener('submit', onSubmit.bind(this));

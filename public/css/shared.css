@@ -104,3 +104,8 @@ nav ul a:hover {
 .input-field .prefix.active {
   color: #388e3c;
 }
+
+/* helper text color */
+.input-field .helper-text {
+  color: #000;
+}

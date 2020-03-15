@@ -36,7 +36,10 @@
 
     <main class="auth__container container valign-wrapper">
       <div class="row">
-        <form class="col s12 m6 offset-m3">
+        <form
+          id="signup-form"
+          class="col s12 m6 offset-m3"
+        >
           {{!-- Card component --}}
           <div class="card z-depth-2">
             <div class="card-content">
@@ -47,11 +50,17 @@
                   <i class="material-icons prefix">account_circle</i>
                   <input
                     id="username"
+                    name="username"
                     type="text"
                     class="validate"
                     required
+                    minlength="3"
                   >
                   <label for="username">Username</label>
+                  <span
+                    id="username-helper-text"
+                    class="helper-text"
+                  >Remember! Must be the same as your minecraft username!</span>
                 </div>
               </div>
               {{!-- Email --}}
@@ -60,11 +69,16 @@
                   <i class="material-icons prefix">alternate_email</i>
                   <input
                     id="email"
+                    name="email"
                     type="email"
                     class="validate"
                     required
                   >
                   <label for="email">Email</label>
+                  <span
+                    id="email-helper-text"
+                    class="helper-text"
+                  ></span>
                 </div>
               </div>
               {{!-- Password --}}
@@ -73,20 +87,26 @@
                   <i class="material-icons prefix">vpn_key</i>
                   <input
                     id="password"
+                    name="password"
                     type="password"
                     class="validate"
-                    required
                     minlength="6"
+                    required
                   >
                   <label for="password">Password</label>
+                  <span
+                    id="password-helper-text"
+                    class="helper-text"
+                  ></span>
                 </div>
               </div>
             </div>
             <div class="card-action center-align">
               <button
+                id="submit-button"
+                name="submit-button"
                 class="btn waves-effect waves-light green darken2"
                 type="submit"
-                name="action"
               >Signup
                 <i class="material-icons right">send</i>
               </button>
@@ -99,7 +119,8 @@
     {{>footer}}
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-    <script src="/js/app.js"></script>
+    <script src="/js/utils.js"></script>
+    <script src="/js/signup.js"></script>
   </body>
 
 </html>

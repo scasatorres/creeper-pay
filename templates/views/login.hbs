@@ -50,11 +50,16 @@
                   <i class="material-icons prefix">alternate_email</i>
                   <input
                     id="email"
+                    name="email"
                     type="email"
                     class="validate"
                     required
                   >
                   <label for="email">Email</label>
+                  <span
+                    id="email-helper-text"
+                    class="helper-text"
+                  ></span>
                 </div>
               </div>
               {{!-- Password --}}
@@ -63,20 +68,25 @@
                   <i class="material-icons prefix">vpn_key</i>
                   <input
                     id="password"
+                    name="password"
                     type="password"
                     class="validate"
                     required
                   >
                   <label for="password">Password</label>
+                  <span
+                    id="password-helper-text"
+                    class="helper-text"
+                  ></span>
                 </div>
               </div>
             </div>
             <div class="card-action center-align">
               <button
-                id="login-button"
-                class="btn waves-effect waves-light green darken2"
+                id="submit-button"
+                name="submit-button"
                 type="submit"
-                name="action"
+                class="btn waves-effect waves-light green darken2"
               >Login
                 <i class="material-icons right">send</i>
               </button>
@@ -89,13 +99,12 @@
     {{>footer}}
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/7.11.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/7.11.0/firebase-auth.js"></script>
 
-    <script src="/scripts/validator/validator.min.js"></script>
-
     <script src="/js/firebase.js"></script>
-    <script src="/js/app.js"></script>
+    <script src="/js/utils.js"></script>
     <script src="/js/login.js"></script>
   </body>
 

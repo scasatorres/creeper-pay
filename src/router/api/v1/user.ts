@@ -24,6 +24,24 @@ router.post('/', async (req: Request, res: Response) => {
   }
 });
 
+router.post('/login', async (req: Request, res: Response) => {
+  try {
+    const { uid } = req.body;
+
+    if (!uid) {
+      throw new Error();
+    }
+
+    const token = await admin.auth().createCustomToken(uid);
+
+    res.cookie('token', token, { httpOnly: true });
+    res.status(200).send({ redirectUrl: '/views/error' });
+    return;
+  } catch (error) {
+    return res.status(400).send();
+  }
+});
+
 router.get('/me', isAuthenticated, async (req: Request, res: Response) => {
   try {
     const userRecord = await admin.auth().getUser(req.uid);
