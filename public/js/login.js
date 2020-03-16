@@ -23,9 +23,9 @@ const onSubmit = async (e) => {
 
   try {
     const firebaseResponse = await firebase.auth().signInWithEmailAndPassword(email, password);
-    const serverResponse = await axios.post(`${baseApiUrl}/users/login`, { uid: firebaseResponse.user.uid });
+    await axios.post(`${baseApiUrl}/users/login`, { uid: firebaseResponse.user.uid });
 
-    window.location.pathname = serverResponse.data.redirectUrl;
+    window.location.pathname = `${baseViewsUrl}/users/account`;
   } catch (error) {
     validationInputs.forEach(($input) => toggleValidationStyles($input, false));
 

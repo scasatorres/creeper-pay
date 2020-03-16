@@ -37,16 +37,18 @@
     <main class="form__container container valign-wrapper">
       <div class="row">
         <form
-          id="signup-form"
-          class="col s12 m6 offset-m3"
+          id="account-form"
+          class="col s12 m10 offset-m1"
         >
           {{!-- Card component --}}
           <div class="card z-depth-2">
             <div class="card-content">
-              <span class="card-title center-align black-text">Signup</span>
-              {{!-- Username --}}
+              <span class="card-title center-align black-text">My account</span>
               <div class="row">
-                <div class="input-field col s12">
+                <span class="card-title black-text">General info</span>
+                <div class="divider grey lighten-1"></div>
+                {{!-- Username --}}
+                <div class="input-field col s12 m6">
                   <i class="material-icons prefix">account_circle</i>
                   <input
                     id="username"
@@ -62,10 +64,8 @@
                     class="helper-text"
                   >Remember! Must be the same as your minecraft username!</span>
                 </div>
-              </div>
-              {{!-- Email --}}
-              <div class="row">
-                <div class="input-field col s12">
+                {{!-- Email --}}
+                <div class="input-field col s12 m6">
                   <i class="material-icons prefix">alternate_email</i>
                   <input
                     id="email"
@@ -81,8 +81,37 @@
                   ></span>
                 </div>
               </div>
-              {{!-- Password --}}
               <div class="row">
+                <span class="card-title black-text">Payment info</span>
+                <div class="divider grey lighten-1"></div>
+                {{!-- Last payment date --}}
+                <div class="input-field col s12 m6">
+                  <i class="material-icons prefix">event</i>
+                  <input
+                    id="last-payment-date"
+                    name="lastPaymentDate"
+                    class="validate"
+                    disabled
+                  >
+                  <label for="lastPaymentDate">Last payment date</label>
+                </div>
+                {{!-- Payment status --}}
+                <div class="input-field col s12 m6">
+                  <i class="material-icons prefix">payment</i>
+                  <input
+                    id="payment-status"
+                    name="paymentStatus"
+                    type="text"
+                    class="validate"
+                    disabled
+                  >
+                  <label for="paymentStatus">Payment status</label>
+                </div>
+              </div>
+              <div class="row">
+                <span class="card-title black-text">Change password</span>
+                <div class="divider grey lighten-1"></div>
+                {{!-- New password --}}
                 <div class="input-field col s12">
                   <i class="material-icons prefix">vpn_key</i>
                   <input
@@ -91,9 +120,8 @@
                     type="password"
                     class="validate"
                     minlength="6"
-                    required
                   >
-                  <label for="password">Password</label>
+                  <label for="password">New password</label>
                   <span
                     id="password-helper-text"
                     class="helper-text"
@@ -101,15 +129,24 @@
                 </div>
               </div>
             </div>
-            <div class="card-action center-align">
+            <div class="card-action">
               <button
                 id="submit-button"
                 name="submit-button"
-                class="btn waves-effect waves-light green darken2"
+                class="btn waves-effect waves-light green darken2 right"
                 type="submit"
               >
-                Signup
-                <i class="material-icons right">send</i>
+                Save changes
+                <i class="material-icons right">save</i>
+              </button>
+              <button
+                name="delete-account-button"
+                class="btn waves-effect waves-light red darken2 left modal-trigger"
+                type="click"
+                data-target="confirmation-modal"
+              >
+                Delete account
+                <i class="material-icons right">delete</i>
               </button>
             </div>
           </div>
@@ -119,14 +156,18 @@
 
     {{>footer}}
 
+    {{>confirmationModal
+    modalHeader='Delete account'
+    modalText='Are you sure you want to delete your account? Deleting your account is permanent.'
+    modalImg='/img/exploding-creeper.gif'
+    }}
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/7.11.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/7.11.0/firebase-auth.js"></script>
 
     <script src="/js/utils.js"></script>
     <script src="/js/shared.js"></script>
-    <script src="/js/signup.js"></script>
+    <script src="/js/account.js"></script>
   </body>
 
 </html>

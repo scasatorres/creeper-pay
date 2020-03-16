@@ -5,10 +5,10 @@ import { unauthenticatedRedirection } from '../../middlewares/auth-redirection';
 const router = express.Router();
 
 router.get(
-  '/profile',
+  '/account',
   unauthenticatedRedirection,
   (req: Request, res: Response) => {
-    return res.render('profile');
+    return res.render('account');
   },
 );
 

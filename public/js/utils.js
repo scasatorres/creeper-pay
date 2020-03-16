@@ -5,6 +5,8 @@ const onInputChange = (submitted, callback, e) => {
   const $submitButton = $element.form.elements['submit-button'];
   const valid = $element.form.checkValidity();
 
+  $element.setAttribute('dirty', 'dirty');
+
   if (!submitted) {
     toggleValidationStyles($element, $element.checkValidity());
   } else {

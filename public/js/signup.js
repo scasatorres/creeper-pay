@@ -28,7 +28,7 @@ const onSubmit = async (e) => {
   try {
     const response = await axios.post(`${baseApiUrl}/users`, { username, email, password });
 
-    window.location.pathname = response.data.redirectUrl;
+    window.location.pathname = `${baseViewsUrl}/users/account`;
   } catch (error) {
     M.toast({ html: error, classes: 'red' });
   } finally {

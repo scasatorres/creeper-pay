@@ -83,14 +83,15 @@ nav ul a:hover {
 .input-field input[type='text']:focus + label,
 .input-field input[type='email']:focus + label,
 .input-field input[type='password']:focus + label {
-  color: #388e3c;
+  color: #388e3c !important;
 }
+
 /* label underline focus color */
 .input-field input[type='text']:focus,
 .input-field input[type='email']:focus,
 .input-field input[type='password']:focus {
-  border-bottom: 1px solid #388e3c;
-  box-shadow: 0 1px 0 0 #388e3c;
+  border-bottom: 1px solid #388e3c !important;
+  box-shadow: 0 1px 0 0 #388e3c !important;
 }
 /* valid color */
 .input-field input[type='text'].valid,
@@ -108,4 +109,15 @@ nav ul a:hover {
 /* helper text color */
 .input-field .helper-text {
   color: #000;
+}
+
+#confirmation-modal img {
+  z-index: -1;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: auto !important;
+  height: 100% !important;
+  margin: auto;
 }

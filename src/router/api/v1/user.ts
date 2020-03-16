@@ -28,7 +28,7 @@ router.post('/', async (req: Request, res: Response) => {
     const user: User = {
       username,
       email,
-      paymentStatus: 'expired',
+      paymentStatus: 'EXPIRED',
       lastPaymentDate: null,
       paymentExpirationDate: null,
     };
@@ -43,10 +43,7 @@ router.post('/', async (req: Request, res: Response) => {
       signed: true,
     });
 
-    return res.status(200).send({
-      user,
-      redirectUrl: '/views/users/profile',
-    });
+    return res.status(200).send({ user });
   } catch (error) {
     return res.status(500).send(error);
   }
@@ -82,12 +79,21 @@ router.post('/login', async (req: Request, res: Response) => {
       signed: true,
     });
 
-    return res.status(200).send({
-      user,
-      redirectUrl: '/views/users/profile',
-    });
+    return res.status(200).send({ user });
   } catch (error) {
     return res.status(400).send();
+  }
+});
+
+router.post('/logout', isAuthenticated, async (req: Request, res: Response) => {
+  try {
+    delete req.user;
+    delete req.uid;
+
+    res.clearCookie(process.env.COOKIE_NAME);
+    res.status(200).send();
+  } catch (error) {
+    res.status(500).send();
   }
 });
 
@@ -105,18 +111,29 @@ router.patch('/me', isAuthenticated, async (req: Request, res: Response) => {
   const isValidOperation = updates.every(update =>
     allowedUpdates.includes(update),
   );
-  const user: User = {} as User;
+  const userData: User = {} as User;
 
   if (!isValidOperation) {
     return res.status(400).send('Error: Invalid updates!');
   }
 
   try {
-    updates.forEach(update => (user[update] = req.body[update]));
+    updates.forEach(update => (userData[update] = req.body[update]));
 
-    const userRecord = await admin.auth().updateUser(req.uid, user);
+    await admin.auth().updateUser(req.uid, userData);
 
-    res.status(200).send(userRecord);
+    delete userData['password'];
+
+    await UsersCollection.doc(req.uid).update(userData);
+
+    const user: User = {
+      ...req.user,
+      ...userData,
+    };
+
+    req.user = user;
+
+    res.status(200).send(user);
   } catch (error) {
     res.status(500).send(error);
   }
@@ -124,9 +141,14 @@ router.patch('/me', isAuthenticated, async (req: Request, res: Response) => {
 
 router.delete('/me', isAuthenticated, async (req: Request, res: Response) => {
   try {
-    const userRecord = await admin.auth().deleteUser(req.uid);
+    await admin.auth().deleteUser(req.uid);
+    await UsersCollection.doc(req.uid).delete();
 
-    res.status(200).send(userRecord);
+    delete req.user;
+    delete req.uid;
+
+    res.clearCookie(process.env.COOKIE_NAME);
+    res.status(200).send();
   } catch (error) {
     return res.status(500).send(error);
   }

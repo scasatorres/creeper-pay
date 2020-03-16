@@ -1,7 +1,7 @@
-import * as jwt from 'jsonwebtoken';
 import { NextFunction, Response } from 'express';
-import { Request } from './../models/extended-request';
 import admin from 'firebase-admin';
+import * as jwt from 'jsonwebtoken';
+import { Request } from './../models/extended-request';
 import { UsersCollection, User } from '../models/user';
 
 const isAuthenticated = async (

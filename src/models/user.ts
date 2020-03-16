@@ -8,7 +8,7 @@ export interface User {
   paymentExpirationDate: Date;
 }
 
-export type paymentStatusType = 'active' | 'expired';
+export type paymentStatusType = 'ACTIVE' | 'EXPIRED';
 
 const usersCollection = db.collection('users');
 export { usersCollection as UsersCollection };
