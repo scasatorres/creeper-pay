@@ -26,10 +26,14 @@ const onSubmit = async (e) => {
   const password = $passwordFormInput.value;
 
   try {
-    const response = await axios.post(`${baseApiUrl}/users`, { username, email, password });
+    showLoader();
+
+    await httpClient.post('/users', { username, email, password });
 
     window.location.pathname = `${baseViewsUrl}/users/account`;
   } catch (error) {
+    hideLoader();
+
     M.toast({ html: error, classes: 'red' });
   } finally {
     submitted = true;

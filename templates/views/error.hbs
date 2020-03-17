@@ -35,8 +35,17 @@
     {{>header}}
 
     <main class="error__container container valign-wrapper">
-      <div class="row">
-        <div class="error__text_container right col s12 m6">
+      <div class="row center-align">
+        <div
+          id="loader-wrapper"
+          class="col s12 m6 offset-m3"
+        >
+          {{>loader}}
+        </div>
+        <div
+          id="content"
+          class="error__text_container right col s12 m6 hide"
+        >
           <p class="flow-text center-align">
             <span class="error__title">{{ errorTitle }}</span>
             <span class="error__message">{{ errorMessage }}</span>

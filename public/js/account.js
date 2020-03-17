@@ -31,7 +31,9 @@ const onSubmit = async (e) => {
 
   if (userData && Object.keys(userData).length) {
     try {
-      await axios.patch(`${baseApiUrl}/users/me`, userData);
+      showLoader();
+
+      await httpClient.patch('/users/me', userData);
 
       validationInputs.forEach(($input) => {
         $input.classList.remove('valid');
@@ -42,6 +44,8 @@ const onSubmit = async (e) => {
     } catch (error) {
       M.toast({ html: error, classes: 'red' });
     } finally {
+      hideLoader();
+
       submitted = true;
     }
   }
@@ -60,17 +64,20 @@ $passwordFormInput.addEventListener('input', onInputChange.bind(this, submitted,
 $accountForm.addEventListener('submit', onSubmit.bind(this));
 $confirmationModalAcceptButton.addEventListener('click', async () => {
   try {
-    await axios.delete(`${baseApiUrl}/users/me`);
+    showLoader();
+    await httpClient.delete('/users/me');
 
     window.location.pathname = '/';
   } catch (error) {
+    hideLoader();
+
     M.toast({ html: error, classes: 'red' });
   }
 });
 
 document.addEventListener('DOMContentLoaded', async () => {
   try {
-    const { data } = await axios.get(`${baseApiUrl}/users/me`);
+    const { data } = await httpClient.get('/users/me');
 
     Object.keys(data).forEach((key) => {
       if ($accountForm.elements[key]) {

@@ -121,3 +121,11 @@ nav ul a:hover {
   height: 100% !important;
   margin: auto;
 }
+
+.loader {
+  background-image: url(/img/grass-block-loader.png);
+  background-position: center;
+  background-size: cover;
+  width: 150px;
+  height: 150px;
+}

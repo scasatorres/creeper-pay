@@ -22,11 +22,15 @@ const onSubmit = async (e) => {
   const password = $passwordFormInput.value;
 
   try {
+    showLoader();
+
     const firebaseResponse = await firebase.auth().signInWithEmailAndPassword(email, password);
-    await axios.post(`${baseApiUrl}/users/login`, { uid: firebaseResponse.user.uid });
+    await httpClient.post('/users/login', { uid: firebaseResponse.user.uid });
 
     window.location.pathname = `${baseViewsUrl}/users/account`;
   } catch (error) {
+    hideLoader();
+
     validationInputs.forEach(($input) => toggleValidationStyles($input, false));
 
     M.toast({ html: 'Invalid credentials!', classes: 'red' });

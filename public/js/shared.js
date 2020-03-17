@@ -3,6 +3,8 @@ const baseViewsUrl = '/views';
 
 // Elements
 const $logoutLink = document.querySelector('#logout-link');
+const $loader = document.querySelector('#loader-wrapper');
+const $content = document.querySelector('#content');
 
 document.addEventListener('DOMContentLoaded', () => {
   // Sidenav instances
@@ -11,15 +13,35 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const modals = document.querySelectorAll('.modal');
   const modalsInstances = M.Modal.init(modals, { dismissible: false });
+
+  hideLoader();
 });
+
+const showLoader = () => {
+  $loader.classList.remove('hide');
+  $content.classList.add('hide');
+};
+
+const hideLoader = () => {
+  $loader.classList.add('hide');
+  $content.classList.remove('hide');
+};
 
 // Listeners
-$logoutLink.addEventListener('click', async () => {
-  try {
-    await axios.post(`${baseApiUrl}/users/logout`);
+if ($logoutLink) {
+  $logoutLink.addEventListener('click', async () => {
+    try {
+      showLoader();
+      await httpClient.post('/users/logout');
 
-    window.location = '/';
-  } catch (error) {
-    M.toast({ html: error, classes: 'red' });
-  }
-});
+      window.location = '/';
+    } catch (error) {
+      hideLoader();
+
+      M.toast({ html: error, classes: 'red' });
+    }
+  });
+}
+
+const httpClient = axios.create();
+httpClient.defaults.baseURL = baseApiUrl;
