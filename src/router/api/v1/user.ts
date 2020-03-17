@@ -85,18 +85,6 @@ router.post('/login', async (req: Request, res: Response) => {
   }
 });
 
-router.post('/logout', isAuthenticated, async (req: Request, res: Response) => {
-  try {
-    delete req.user;
-    delete req.uid;
-
-    res.clearCookie(process.env.COOKIE_NAME);
-    res.status(200).send();
-  } catch (error) {
-    res.status(500).send();
-  }
-});
-
 router.get('/me', isAuthenticated, async (req: Request, res: Response) => {
   try {
     return res.status(200).send(req.user);

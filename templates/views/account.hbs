@@ -35,10 +35,10 @@
     {{>header}}
 
     <main class="form__container container valign-wrapper">
-      <div class="row center-align">
+      <div class="row">
         <div
           id="loader-wrapper"
-          class="col s12 m6 offset-m3"
+          class="col s12 m6 offset-m3 center-align"
         >
           {{>loader}}
         </div>
@@ -65,7 +65,10 @@
                       required
                       minlength="3"
                     >
-                    <label for="username">Username</label>
+                    <label
+                      class="active"
+                      for="username"
+                    >Username</label>
                     <span
                       id="username-helper-text"
                       class="helper-text"
@@ -81,7 +84,10 @@
                       class="validate"
                       required
                     >
-                    <label for="email">Email</label>
+                    <label
+                      class="active"
+                      for="email"
+                    >Email</label>
                     <span
                       id="email-helper-text"
                       class="helper-text"
@@ -100,7 +106,10 @@
                       class="validate"
                       disabled
                     >
-                    <label for="lastPaymentDate">Last payment date</label>
+                    <label
+                      class="active"
+                      for="lastPaymentDate"
+                    >Last payment date</label>
                   </div>
                   {{!-- Payment status --}}
                   <div class="input-field col s12 m6">
@@ -112,7 +121,10 @@
                       class="validate"
                       disabled
                     >
-                    <label for="paymentStatus">Payment status</label>
+                    <label
+                      class="active"
+                      for="paymentStatus"
+                    >Payment status</label>
                   </div>
                 </div>
                 <div class="row">
@@ -128,7 +140,10 @@
                       class="validate"
                       minlength="6"
                     >
-                    <label for="password">New password</label>
+                    <label
+                      class="active"
+                      for="password"
+                    >New password</label>
                     <span
                       id="password-helper-text"
                       class="helper-text"

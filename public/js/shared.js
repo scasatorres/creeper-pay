@@ -2,7 +2,6 @@ const baseApiUrl = '/api/v1';
 const baseViewsUrl = '/views';
 
 // Elements
-const $logoutLink = document.querySelector('#logout-link');
 const $loader = document.querySelector('#loader-wrapper');
 const $content = document.querySelector('#content');
 
@@ -26,22 +25,6 @@ const hideLoader = () => {
   $loader.classList.add('hide');
   $content.classList.remove('hide');
 };
-
-// Listeners
-if ($logoutLink) {
-  $logoutLink.addEventListener('click', async () => {
-    try {
-      showLoader();
-      await httpClient.post('/users/logout');
-
-      window.location = '/';
-    } catch (error) {
-      hideLoader();
-
-      M.toast({ html: error, classes: 'red' });
-    }
-  });
-}
 
 const httpClient = axios.create();
 httpClient.defaults.baseURL = baseApiUrl;

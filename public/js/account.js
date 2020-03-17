@@ -77,6 +77,8 @@ $confirmationModalAcceptButton.addEventListener('click', async () => {
 
 document.addEventListener('DOMContentLoaded', async () => {
   try {
+    showLoader();
+
     const { data } = await httpClient.get('/users/me');
 
     Object.keys(data).forEach((key) => {
@@ -88,5 +90,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     M.updateTextFields();
   } catch (error) {
     M.toast({ html: error, classes: 'red' });
+  } finally {
+    hideLoader();
   }
 });

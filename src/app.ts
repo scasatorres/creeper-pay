@@ -18,7 +18,7 @@ hbs.registerPartials(partialsPath);
 
 app.use(express.static(publicDirPath));
 
-app.use(helmet());
+app.use(helmet({ noCache: true }));
 app.use(cookieParser(process.env.COOKIE_SECRET));
 app.use(express.json());
 

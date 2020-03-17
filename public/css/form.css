@@ -17,11 +17,11 @@
   margin-bottom: 16px;
 }
 
-@media only screen and (max-width: 992px) {
-  .form__container .card-content .card-title.center-align {
-    margin-bottom: 32px;
-  }
+.form__container .card-title:first-child {
+  margin-bottom: 36px;
+}
 
+@media only screen and (max-width: 992px) {
   .form__container .card-action {
     text-align: center;
   }

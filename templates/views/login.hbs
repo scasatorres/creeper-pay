@@ -35,10 +35,10 @@
     {{>header}}
 
     <main class="form__container container valign-wrapper">
-      <div class="row center-align">
+      <div class="row">
         <div
           id="loader-wrapper"
-          class="col s12 m6 offset-m3"
+          class="col s12 m6 offset-m3 center-align"
         >
           {{>loader}}
         </div>
@@ -62,7 +62,10 @@
                       class="validate"
                       required
                     >
-                    <label for="email">Email</label>
+                    <label
+                      class="active"
+                      for="email"
+                    >Email</label>
                     <span
                       id="email-helper-text"
                       class="helper-text"
@@ -80,7 +83,10 @@
                       class="validate"
                       required
                     >
-                    <label for="password">Password</label>
+                    <label
+                      class="active"
+                      for="password"
+                    >Password</label>
                     <span
                       id="password-helper-text"
                       class="helper-text"
