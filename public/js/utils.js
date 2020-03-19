@@ -1,5 +1,3 @@
-
-
 const onInputChange = (submitted, callback, e) => {
   const $element = e.target;
   const $submitButton = $element.form.elements['submit-button'];
