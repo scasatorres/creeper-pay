@@ -35,6 +35,7 @@ const isAuthenticated = async (
 
     next();
   } catch (error) {
+    res.clearCookie(process.env.COOKIE_NAME);
     res.status(401).send(error);
   }
 };
