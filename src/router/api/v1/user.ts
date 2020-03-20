@@ -1,7 +1,9 @@
+import { MinecraftUUID } from './../../../models/minecraftUUID';
+import express, { Response } from 'express';
+import admin from 'firebase-admin';
+import got from 'got';
 import * as jwt from 'jsonwebtoken';
 import { Request } from '../../../models/extended-request';
-import express, { Response } from 'express';
-import admin, { auth } from 'firebase-admin';
 import { User, UsersCollection } from '../../../models/user';
 import { isAuthenticated } from '../../../middlewares/auth';
 
@@ -24,9 +26,23 @@ router.post('/', async (req: Request, res: Response) => {
       .auth()
       .createUser({ email, password, displayName: username });
     const token = jwt.sign({ uid }, process.env.JWT_SECRET);
+    const uuidGeneratorResponse = await got.get(
+      `${process.env.UUID_GENERATOR_URL}/${username}`,
+    );
+
+    if (!uuidGeneratorResponse.body) {
+      throw new Error();
+    }
+
+    const uuidGeneratorObj: MinecraftUUID = JSON.parse(
+      uuidGeneratorResponse.body,
+    );
+    const minecraftUUID = uuidGeneratorObj.offlinesplitteduuid;
+
     const user: User = {
       username,
       email,
+      minecraftUUID,
       paymentStatus: 'EXPIRED',
       lastPaymentDate: null,
       paymentExpirationDate: null,
@@ -110,6 +126,22 @@ router.patch('/me', isAuthenticated, async (req: Request, res: Response) => {
     await admin.auth().updateUser(req.uid, userData);
 
     delete userData['password'];
+
+    if (userData.hasOwnProperty('username')) {
+      const uuidGeneratorResponse = await got.get(
+        `${process.env.UUID_GENERATOR_URL}/${userData.username}`,
+      );
+
+      if (!uuidGeneratorResponse.body) {
+        throw new Error();
+      }
+
+      const minecraftUUID: MinecraftUUID = JSON.parse(
+        uuidGeneratorResponse.body,
+      );
+
+      userData.minecraftUUID = minecraftUUID.offlinesplitteduuid;
+    }
 
     await UsersCollection.doc(req.uid).update(userData);
 

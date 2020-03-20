@@ -3,6 +3,7 @@ import { db } from '../config/firebase-admin';
 export interface User {
   username: string;
   email: string;
+  minecraftUUID: string;
   paymentStatus: paymentStatusType;
   lastPaymentDate: Date;
   paymentExpirationDate: Date;
