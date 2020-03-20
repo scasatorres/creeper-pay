@@ -19,6 +19,10 @@ const validationInputs = [
   $emailFormInput,
   $passwordFormInput
 ];
+const dateFields = [
+  'lastPaymentDate',
+  'paymentExpirationDate'
+];
 
 const onSubmit = async (e) => {
   e.preventDefault();
@@ -82,7 +86,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     const { data } = await httpClient.get('/users/me');
 
     Object.keys(data).forEach((key) => {
-      if ($accountForm.elements[key]) {
+      if (dateFields.includes(key) && data[key]) {
+        const date = new Date(data[key]._seconds * 1000);
+
+        $accountForm.elements[key].value = dateFns.format(date, 'DD/MM/YYYY');
+      } else if ($accountForm.elements[key]) {
         $accountForm.elements[key].value = data[key]
       }
     });

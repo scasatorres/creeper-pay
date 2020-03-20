@@ -27,7 +27,7 @@ const onSubmit = async (e) => {
     const firebaseResponse = await firebase.auth().signInWithEmailAndPassword(email, password);
     await httpClient.post('/users/login', { uid: firebaseResponse.user.uid });
 
-    window.location.pathname = `${baseViewsUrl}/users/account`;
+    window.location.pathname = routes.payment;
   } catch (error) {
     hideLoader();
 

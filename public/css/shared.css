@@ -78,6 +78,9 @@ nav ul a:hover {
 /* label color */
 .input-field label {
   color: #000;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
 }
 /* label focus color */
 .input-field input[type='text']:focus + label,
@@ -128,4 +131,8 @@ nav ul a:hover {
   background-size: cover;
   width: 150px;
   height: 150px;
+}
+
+.invisible {
+  visibility: hidden;
 }

@@ -98,7 +98,7 @@
                   <span class="card-title black-text">Payment info</span>
                   <div class="divider grey lighten-1"></div>
                   {{!-- Last payment date --}}
-                  <div class="input-field col s12 m6">
+                  <div class="input-field col s12 m4">
                     <i class="material-icons prefix">event</i>
                     <input
                       id="last-payment-date"
@@ -111,8 +111,22 @@
                       for="lastPaymentDate"
                     >Last payment date</label>
                   </div>
+                  {{!-- Payment expiration date --}}
+                  <div class="input-field col s12 m4">
+                    <i class="material-icons prefix">event</i>
+                    <input
+                      id="payment-expiration-date"
+                      name="paymentExpirationDate"
+                      class="validate"
+                      disabled
+                    >
+                    <label
+                      class="active"
+                      for="paymentExpirationDate"
+                    >Payment expiration date</label>
+                  </div>
                   {{!-- Payment status --}}
-                  <div class="input-field col s12 m6">
+                  <div class="input-field col s12 m4">
                     <i class="material-icons prefix">payment</i>
                     <input
                       id="payment-status"
@@ -186,6 +200,7 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="http://cdn.date-fns.org/v1.9.0/date_fns.min.js"></script>
 
     <script src="/js/utils.js"></script>
     <script src="/js/shared.js"></script>

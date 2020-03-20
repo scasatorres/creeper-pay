@@ -1,20 +1,6 @@
 // Elements
 const $paymentForm = document.querySelector('#payment-form');
-const $cardNumberInput = $paymentForm.elements['card-number'];
-const $expirationDateInput = $paymentForm.elements['expiration-date'];
-const $cvvInput = $paymentForm.elements['cvv'];
 const $payButton = $paymentForm.elements['submit-button'];
-
-const $cardNumberHelperText = $paymentForm.querySelector('#card-number-helper-text');
-const $expirationDateHelperText = $paymentForm.querySelector('#expiration-date-helper-text');
-const $cvvHelperText = $paymentForm.querySelector('#cvv-helper-text');
-
-let submitted = false;
-const validationInputs = [
-  $cardNumberInput,
-  $expirationDateInput,
-  $cvvInput
-];
 
 $payButton.setAttribute('disabled', 'disabled');
 
@@ -26,8 +12,90 @@ const findIcon = (field) => {
   return document.querySelector('#' + field.container.id + '-icon');
 }
 
-const options = {
-  authorization: 'sandbox_csndb7c4_b8wnzm35pz65w4zp'
+const findHelperText = (field) => {
+  return document.querySelector('#' + field.container.id + '-helper-text');
+}
+
+const onFocus = (event) => {
+  const field = event.fields[event.emittedBy];
+  const label = findLabel(field);
+  const icon = findIcon(field);
+
+  field.container.classList.remove('invalid');
+
+  label.classList.add('label-float');
+  label.classList.remove('filled');
+
+  icon.classList.add('active');
+}
+
+const onBlur = (event) => {
+  const field = event.fields[event.emittedBy];
+  const label = findLabel(field);
+  const icon = findIcon(field);
+  const helperText = findHelperText(field);
+
+  if (field.isEmpty) {
+    field.container.classList.add('invalid');
+
+    label.classList.remove('label-float');
+  } else if (field.isValid) {
+    label.classList.add('filled');
+
+    helperText.classList.remove('invalid');
+    helperText.classList.add('invisible');
+  } else {
+    field.container.classList.add('invalid');
+
+    helperText.classList.add('invalid');
+    helperText.classList.remove('invisible');
+  }
+
+  icon.classList.remove('active');
+};
+
+const onEmptyField = (event) => {
+  const field = event.fields[event.emittedBy];
+  const label = findLabel(field);
+  const helperText = findHelperText(field);
+
+  label.classList.remove('filled');
+  label.classList.remove('invalid');
+
+  helperText.classList.add('invalid');
+  helperText.classList.remove('invisible');
+};
+
+const onValidityChange = (event) => {
+  const field = event.fields[event.emittedBy];
+  const label = findLabel(field);
+  const helperText = findHelperText(field);
+
+  if (field.isPotentiallyValid) {
+    label.classList.remove('invalid');
+    helperText.classList.remove('invalid');
+    helperText.classList.add('invisible');
+  } else {
+    label.classList.add('invalid');
+    helperText.classList.add('invalid');
+    helperText.classList.remove('invisible');
+  }
+};
+
+const onSubmit = async (hostedFieldsInstance, event) => {
+  event.preventDefault();
+
+  try {
+    showLoader();
+
+    const payload = await hostedFieldsInstance.tokenize();
+    await httpClient.post('payments/checkout', { paymentToken: payload.nonce });
+
+    window.location.pathname = routes.account;
+    M.toast({ html: 'Payment success!', classes: 'green' });
+  } catch (error) {
+    M.toast({ html: error, classes: 'red' });
+  }
 };
 
 const createHostedFieldsInstance = (clientInstance) => {
@@ -41,7 +109,7 @@ const createHostedFieldsInstance = (clientInstance) => {
     fields: {
       number: {
         selector: '#card-number',
-        placeholder: '1111 1111 1111 1111',
+        placeholder: '1111 1111 1111 1111'
       },
       expirationDate: {
         selector: '#expiration-date',
@@ -56,76 +124,28 @@ const createHostedFieldsInstance = (clientInstance) => {
 };
 
 const cardTokenization = (hostedFieldsInstance) => {
-  hostedFieldsInstance.on('focus', function (event) {
-    const field = event.fields[event.emittedBy];
-
-    field.container.classList.remove('invalid');
-    findLabel(field).classList.add('label-float');
-    findLabel(field).classList.remove('filled');
-    findIcon(field).classList.add('active');
-  });
-
-  hostedFieldsInstance.on('blur', function (event) {
-    const field = event.fields[event.emittedBy];
-    const label = findLabel(field);
-
-    if (field.isEmpty) {
-      field.container.classList.add('invalid');
-      label.classList.remove('label-float');
-    } else if (field.isValid) {
-      label.classList.add('filled');
-    } else {
-      // label.classList.add('invalid');
-      field.container.classList.add('invalid');
-    }
-
-    findIcon(field).classList.remove('active');
-  });
-
-  hostedFieldsInstance.on('empty', function (event) {
-    const field = event.fields[event.emittedBy];
-
-    findLabel(field).classList.remove('filled');
-    findLabel(field).classList.remove('invalid');
-  });
-
-  hostedFieldsInstance.on('validityChange', function (event) {
-    const field = event.fields[event.emittedBy];
-    const label = findLabel(field);
-
-    if (field.isPotentiallyValid) {
-      label.classList.remove('invalid');
-    } else {
-      label.classList.add('invalid');
-    }
-  });
+  hostedFieldsInstance.on('focus', onFocus.bind(this));
+  hostedFieldsInstance.on('blur', onBlur.bind(this));
+  hostedFieldsInstance.on('empty', onEmptyField.bind(this));
+  hostedFieldsInstance.on('validityChange', onValidityChange.bind(this));
 
   $payButton.removeAttribute('disabled');
 
-  $paymentForm.addEventListener('submit', (event) => {
-    event.preventDefault();
-
-    hostedFieldsInstance.tokenize(function (tokenizeErr, payload) {
-      if (tokenizeErr) {
-        return M.toast({ html: tokenizeErr, classes: 'red' });
-      }
-
-      // If this was a real integration, this is where you would
-      // send the nonce to your server.
-      console.log('Got a nonce: ' + payload.nonce);
-    });
-  });
+  $paymentForm.addEventListener('submit', onSubmit.bind(this, hostedFieldsInstance));
 };
 
-document.addEventListener('DOMContentLoaded', () => {
-  showLoader();
+document.addEventListener('DOMContentLoaded', async () => {
+  try {
+    showLoader();
+
+    const { data } = await httpClient.get('/payments/token');
+
+    const clientInstance = await braintree.client.create({ authorization: data.clientToken });
+    const hostedFieldsInstance = await createHostedFieldsInstance(clientInstance);
+    await cardTokenization(hostedFieldsInstance);
+  } catch (error) {
+    M.toast({ html: error, classes: 'red' });
+  } finally {
+    hideLoader();
+  }
 });
-
-braintree.client.create(options)
-  .then(createHostedFieldsInstance)
-  .then(cardTokenization)
-  .catch((error) => {
-    return M.toast({ html: tokenizeErr, classes: 'red' });
-  })
-  .finally(() => hideLoader());
-

@@ -30,7 +30,7 @@ const onSubmit = async (e) => {
 
     await httpClient.post('/users', { username, email, password });
 
-    window.location.pathname = `${baseViewsUrl}/users/account`;
+    window.location.pathname = routes.account;
   } catch (error) {
     hideLoader();
 

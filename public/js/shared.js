@@ -1,5 +1,13 @@
 const baseApiUrl = '/api/v1';
 const baseViewsUrl = '/views';
+const routes = {
+  login: `${baseViewsUrl}/auth/login`,
+  signup: `${baseViewsUrl}/auth/signup`,
+  logout: `${baseViewsUrl}/auth/logout`,
+  account: `${baseViewsUrl}/users/account`,
+  payment: `${baseViewsUrl}/payment`,
+  error: `${baseViewsUrl}/error`
+};
 
 // Elements
 const $loader = document.querySelector('#loader-wrapper');
