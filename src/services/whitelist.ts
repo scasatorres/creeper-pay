@@ -67,7 +67,9 @@ export default class WhitelistService {
       };
 
       const filteredWhitelistUsers = whitelistUsers.filter(
-        user => user.uuid !== oldUserData.minecraftUUID,
+        user =>
+          user.uuid !== oldUserData.minecraftUUID ||
+          user.name !== oldUserData.username,
       );
       const allowedUsers: WhitelistUser[] = [
         ...filteredWhitelistUsers,
@@ -87,7 +89,9 @@ export default class WhitelistService {
   ): Promise<void> => {
     return new Promise((resolve, reject) => {
       const allowedUsers: WhitelistUser[] = whitelistUsers.filter(
-        whitelistUser => whitelistUser.uuid !== user.minecraftUUID,
+        whitelistUser =>
+          whitelistUser.uuid !== user.minecraftUUID ||
+          whitelistUser.name !== user.username,
       );
       const allowedUsersJSON = JSON.stringify(allowedUsers);
 
@@ -104,7 +108,9 @@ export default class WhitelistService {
     return new Promise((resolve, reject) => {
       const allowedUsers: WhitelistUser[] = whitelistUsers.filter(user => {
         return !expiredPaymentUsers.find(
-          expiredPaymentUser => expiredPaymentUser.minecraftUUID === user.uuid,
+          expiredPaymentUser =>
+            expiredPaymentUser.minecraftUUID === user.uuid ||
+            expiredPaymentUser.username === user.name,
         );
       });
 

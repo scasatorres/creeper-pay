@@ -4,11 +4,18 @@ import got from 'got';
 import { Response } from 'express';
 import admin from 'firebase-admin';
 import * as jwt from 'jsonwebtoken';
-import { MinecraftUUID } from './../models/minecraftUUID';
+import {
+  MinecraftOfflineUUID,
+  MinecraftOnlineUUID,
+} from '../models/minecraft-uuid';
 import { Request } from './../models/extended-request';
 import { UsersCollection, paymentStatusEnum, User } from '../models/user';
 import WhitelistService from './whitelist';
+import MinecraftUUIDService from './minecraft-uuid';
 
+const minecraftUUIDService = Container.get<MinecraftUUIDService>(
+  MinecraftUUIDService,
+);
 const whitelistService = Container.get<WhitelistService>(WhitelistService);
 
 export default class UserService {
@@ -32,18 +39,8 @@ export default class UserService {
       .auth()
       .createUser({ email, password, displayName: username });
     const token = jwt.sign({ uid }, process.env.JWT_SECRET);
-    const uuidGeneratorResponse = await got.get(
-      `${process.env.UUID_GENERATOR_URL}/${username}`,
-    );
 
-    if (!uuidGeneratorResponse.body) {
-      throw new Error();
-    }
-
-    const uuidGeneratorObj: MinecraftUUID = JSON.parse(
-      uuidGeneratorResponse.body,
-    );
-    const minecraftUUID = uuidGeneratorObj.offlinesplitteduuid;
+    const minecraftUUID = await minecraftUUIDService.getUUID(username);
 
     const user: User = {
       uid,
@@ -104,19 +101,11 @@ export default class UserService {
     delete updatedUserData['password'];
 
     if (updatedUserData.hasOwnProperty('username')) {
-      const uuidGeneratorResponse = await got.get(
-        `${process.env.UUID_GENERATOR_URL}/${updatedUserData.username}`,
+      const minecraftUUID = await minecraftUUIDService.getUUID(
+        updatedUserData.username,
       );
 
-      if (!uuidGeneratorResponse.body) {
-        throw new Error();
-      }
-
-      const minecraftUUID: MinecraftUUID = JSON.parse(
-        uuidGeneratorResponse.body,
-      );
-
-      updatedUserData.minecraftUUID = minecraftUUID.offlinesplitteduuid;
+      updatedUserData.minecraftUUID = minecraftUUID;
     }
 
     await UsersCollection.doc(req.uid).update(updatedUserData);
