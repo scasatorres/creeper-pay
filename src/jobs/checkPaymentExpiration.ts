@@ -9,7 +9,7 @@ const userService = Container.get<UserService>(UserService);
 const whitelistService = Container.get<WhitelistService>(WhitelistService);
 
 const job = new CronJob('* */20 * * * *', async () => {
-  const whitelistUsers: WhitelistUser[] = await whitelistService.read();
+  const whitelistUsers: WhitelistUser[] = await whitelistService.getWhitelistUsers();
 
   if (!whitelistUsers.length) {
     return;
@@ -28,8 +28,8 @@ const job = new CronJob('* */20 * * * *', async () => {
   Promise.all(updatePaymentStatusPromises);
 
   await whitelistService.removeExpiredPaymentUsers(
-    whitelistUsers,
     expiredPaymentUsers,
+    whitelistUsers,
   );
 });
 

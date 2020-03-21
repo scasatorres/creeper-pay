@@ -69,7 +69,7 @@ router.patch('/me', isAuthenticated, async (req: Request, res: Response) => {
 
     const user = userService.updateCurrentUser(req, userData);
 
-    return res.status(200).send(user);
+    return res.status(200).send({ user });
   } catch (error) {
     return res.status(500).send(error);
   }

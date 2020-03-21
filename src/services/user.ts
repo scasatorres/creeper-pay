@@ -1,3 +1,4 @@
+import { Container } from 'typedi';
 import { BasicUser } from './../models/user';
 import got from 'got';
 import { Response } from 'express';
@@ -6,6 +7,9 @@ import * as jwt from 'jsonwebtoken';
 import { MinecraftUUID } from './../models/minecraftUUID';
 import { Request } from './../models/extended-request';
 import { UsersCollection, paymentStatusEnum, User } from '../models/user';
+import WhitelistService from './whitelist';
+
+const whitelistService = Container.get<WhitelistService>(WhitelistService);
 
 export default class UserService {
   public signup = async (
@@ -117,6 +121,14 @@ export default class UserService {
 
     await UsersCollection.doc(req.uid).update(updatedUserData);
 
+    if (updatedUserData.hasOwnProperty('username')) {
+      await whitelistService.updateUser(
+        updatedUserData,
+        req.user,
+        await whitelistService.getWhitelistUsers(),
+      );
+    }
+
     const user: User = {
       ...req.user,
       ...updatedUserData,
@@ -130,6 +142,10 @@ export default class UserService {
   public deleteUser = async (req: Request, res: Response) => {
     await admin.auth().deleteUser(req.uid);
     await UsersCollection.doc(req.uid).delete();
+    await whitelistService.removeUser(
+      req.user,
+      await whitelistService.getWhitelistUsers(),
+    );
 
     delete req.user;
     delete req.uid;

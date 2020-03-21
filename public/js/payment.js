@@ -91,8 +91,11 @@ const onSubmit = async (hostedFieldsInstance, event) => {
     const payload = await hostedFieldsInstance.tokenize();
     await httpClient.post('payments/checkout', { paymentToken: payload.nonce });
 
-    window.location.pathname = routes.account;
-    M.toast({ html: 'Payment success!', classes: 'green' });
+    M.toast({
+      html: 'Payment success!', classes: 'green', completeCallback: () => {
+        window.location.pathname = routes.account;
+      }
+    });
   } catch (error) {
     M.toast({ html: error, classes: 'red' });
   }

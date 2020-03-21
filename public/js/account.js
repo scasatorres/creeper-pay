@@ -83,15 +83,15 @@ document.addEventListener('DOMContentLoaded', async () => {
   try {
     showLoader();
 
-    const { data } = await httpClient.get('/users/me');
+    const { data: { user } } = await httpClient.get('/users/me');
 
-    Object.keys(data).forEach((key) => {
-      if (dateFields.includes(key) && data[key]) {
-        const date = new Date(data[key]._seconds * 1000);
+    Object.keys(user).forEach((key) => {
+      if (dateFields.includes(key) && user[key]) {
+        const date = new Date(user[key]._seconds * 1000);
 
         $accountForm.elements[key].value = dateFns.format(date, 'DD/MM/YYYY');
       } else if ($accountForm.elements[key]) {
-        $accountForm.elements[key].value = data[key]
+        $accountForm.elements[key].value = user[key]
       }
     });
 

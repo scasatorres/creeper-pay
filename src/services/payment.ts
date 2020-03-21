@@ -46,7 +46,10 @@ export default class PaymentService {
     await UsersCollection.doc(req.uid).update(userData);
     await PaymentsCollection.doc(result.transaction.id).set(paymentData);
 
-    await whitelistService.addUser(await whitelistService.read(), req.user);
+    await whitelistService.addUser(
+      req.user,
+      await whitelistService.getWhitelistUsers(),
+    );
 
     req.user = {
       ...req.user,

@@ -3,7 +3,7 @@ import { WhitelistUser } from './../models/whitelist';
 import { User } from './../models/user';
 
 export default class WhitelistService {
-  public read = (): Promise<WhitelistUser[]> => {
+  public getWhitelistUsers = (): Promise<WhitelistUser[]> => {
     return new Promise((resolve, reject) => {
       try {
         const whitelistPath = process.env.WHITELIST_PATH;
@@ -37,8 +37,8 @@ export default class WhitelistService {
   };
 
   public addUser = (
-    whiteListUsers: WhitelistUser[],
     user: User,
+    whitelistUsers: WhitelistUser[],
   ): Promise<void> => {
     return new Promise((resolve, reject) => {
       const whitelistUser: WhitelistUser = {
@@ -46,7 +46,49 @@ export default class WhitelistService {
         name: user.username,
       };
 
-      const allowedUsers: WhitelistUser[] = [...whiteListUsers, whitelistUser];
+      const allowedUsers: WhitelistUser[] = [...whitelistUsers, whitelistUser];
+      const allowedUsersJSON = JSON.stringify(allowedUsers);
+
+      fs.writeFile(process.env.WHITELIST_PATH, allowedUsersJSON, () => {
+        return resolve();
+      });
+    });
+  };
+
+  public updateUser = (
+    updatedUserData: User,
+    oldUserData: User,
+    whitelistUsers: WhitelistUser[],
+  ): Promise<void> => {
+    return new Promise((resolve, reject) => {
+      const whitelistUser: WhitelistUser = {
+        uuid: updatedUserData.minecraftUUID,
+        name: updatedUserData.username,
+      };
+
+      const filteredWhitelistUsers = whitelistUsers.filter(
+        user => user.uuid !== oldUserData.minecraftUUID,
+      );
+      const allowedUsers: WhitelistUser[] = [
+        ...filteredWhitelistUsers,
+        whitelistUser,
+      ];
+      const allowedUsersJSON = JSON.stringify(allowedUsers);
+
+      fs.writeFile(process.env.WHITELIST_PATH, allowedUsersJSON, () => {
+        return resolve();
+      });
+    });
+  };
+
+  public removeUser = async (
+    user: User,
+    whitelistUsers: WhitelistUser[],
+  ): Promise<void> => {
+    return new Promise((resolve, reject) => {
+      const allowedUsers: WhitelistUser[] = whitelistUsers.filter(
+        whitelistUser => whitelistUser.uuid !== user.minecraftUUID,
+      );
       const allowedUsersJSON = JSON.stringify(allowedUsers);
 
       fs.writeFile(process.env.WHITELIST_PATH, allowedUsersJSON, () => {
@@ -56,11 +98,11 @@ export default class WhitelistService {
   };
 
   public removeExpiredPaymentUsers = (
-    whiteListUsers: WhitelistUser[],
     expiredPaymentUsers: User[],
+    whitelistUsers: WhitelistUser[],
   ): Promise<void> => {
     return new Promise((resolve, reject) => {
-      const allowedUsers: WhitelistUser[] = whiteListUsers.filter(user => {
+      const allowedUsers: WhitelistUser[] = whitelistUsers.filter(user => {
         return !expiredPaymentUsers.find(
           expiredPaymentUser => expiredPaymentUser.minecraftUUID === user.uuid,
         );
