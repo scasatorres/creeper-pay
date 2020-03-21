@@ -1,6 +1,7 @@
 import { db } from '../config/firebase-admin';
 
 export interface User {
+  uid: string;
   username: string;
   email: string;
   minecraftUUID: string;
@@ -10,6 +11,10 @@ export interface User {
 }
 
 export type paymentStatusType = 'ACTIVE' | 'EXPIRED';
+export enum paymentStatusEnum {
+  active = 'ACTIVE',
+  expired = 'EXPIRED',
+}
 
 const usersCollection = db.collection('users');
 export { usersCollection as UsersCollection };

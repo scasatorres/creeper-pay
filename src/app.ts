@@ -5,6 +5,7 @@ import hbs from 'hbs';
 import path from 'path';
 import { mainRouter } from './router';
 require('./config/firebase-admin');
+require('./jobs/checkPaymentExpiration');
 
 const app = express();
 

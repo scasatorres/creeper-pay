@@ -1,8 +1,10 @@
+import { paymentStatusEnum } from './../../../models/user';
 import { MinecraftUUID } from './../../../models/minecraftUUID';
 import express, { Response } from 'express';
 import admin from 'firebase-admin';
 import got from 'got';
 import * as jwt from 'jsonwebtoken';
+import { compareAsc } from 'date-fns';
 import { Request } from '../../../models/extended-request';
 import { User, UsersCollection } from '../../../models/user';
 import { isAuthenticated } from '../../../middlewares/auth';
@@ -40,12 +42,13 @@ router.post('/', async (req: Request, res: Response) => {
     const minecraftUUID = uuidGeneratorObj.offlinesplitteduuid;
 
     const user: User = {
+      uid,
       username,
       email,
       minecraftUUID,
-      paymentStatus: 'EXPIRED',
+      paymentStatus: paymentStatusEnum.expired,
       lastPaymentDate: null,
-      paymentExpirationDate: null,
+      paymentExpirationDate: new Date(),
     };
 
     await UsersCollection.doc(uid).set(user);

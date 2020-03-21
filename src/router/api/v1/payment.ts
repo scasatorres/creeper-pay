@@ -1,13 +1,16 @@
-import { Payment, PaymentsCollection } from './../../../models/payment';
-import { User } from './../../../models/user';
-import { Request } from './../../../models/extended-request';
 import express, { Response } from 'express';
+import { add } from 'date-fns';
+import { Container } from 'typedi';
+import { Payment, PaymentsCollection } from './../../../models/payment';
+import { User, paymentStatusEnum } from './../../../models/user';
+import { Request } from './../../../models/extended-request';
 import { isAuthenticated } from '../../../middlewares/auth';
 import { gateway } from '../../../config/braintree';
 import { UsersCollection } from '../../../models/user';
-import { add } from 'date-fns';
+import WhitelistService from '../../../services/whitelist';
 
 const router = express.Router();
+const whitelistService = Container.get<WhitelistService>(WhitelistService);
 
 router.get('/token', isAuthenticated, async (req: Request, res: Response) => {
   try {
@@ -40,7 +43,7 @@ router.post(
       }
 
       const userData: Partial<User> = {
-        paymentStatus: 'ACTIVE',
+        paymentStatus: paymentStatusEnum.active,
         lastPaymentDate: paymentDate,
         paymentExpirationDate,
       };
@@ -54,6 +57,15 @@ router.post(
 
       await UsersCollection.doc(req.uid).update(userData);
       await PaymentsCollection.doc(result.transaction.id).set(paymentData);
+
+      await whitelistService.addUser(await whitelistService.read(), req.user);
+
+      const user: User = {
+        ...req.user,
+        ...userData,
+      };
+
+      req.user = user;
 
       return res.status(200).send();
     } catch (error) {
