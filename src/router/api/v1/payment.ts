@@ -7,6 +7,20 @@ import PaymentService from '../../../services/payment';
 const router = express.Router();
 const paymentService = Container.get<PaymentService>(PaymentService);
 
+router.get(
+  '/payment-amount',
+  isAuthenticated,
+  async (req: Request, res: Response) => {
+    try {
+      const amount = paymentService.getCurrentPrice();
+
+      return res.status(200).send({ amount });
+    } catch (error) {
+      return res.status(500).send(error);
+    }
+  },
+);
+
 router.get('/token', isAuthenticated, async (req: Request, res: Response) => {
   try {
     const clientToken = await paymentService.getClientToken();
@@ -25,6 +39,22 @@ router.post(
       const { paymentToken } = req.body;
 
       await paymentService.checkout(req, paymentToken);
+
+      return res.status(200).send();
+    } catch (error) {
+      return res.status(500).send(error);
+    }
+  },
+);
+
+router.post(
+  '/paypal-checkout',
+  isAuthenticated,
+  async (req: Request, res: Response) => {
+    try {
+      const { orderID } = req.body;
+
+      await paymentService.paypalCheckout(req, orderID);
 
       return res.status(200).send();
     } catch (error) {
