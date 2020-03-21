@@ -1,65 +1,24 @@
-import { paymentStatusEnum } from './../../../models/user';
-import { MinecraftUUID } from './../../../models/minecraftUUID';
+import { updateableUserFields } from './../../../models/user';
+import { Container } from 'typedi';
 import express, { Response } from 'express';
-import admin from 'firebase-admin';
-import got from 'got';
-import * as jwt from 'jsonwebtoken';
-import { compareAsc } from 'date-fns';
 import { Request } from '../../../models/extended-request';
-import { User, UsersCollection } from '../../../models/user';
+import { User, BasicUser } from '../../../models/user';
 import { isAuthenticated } from '../../../middlewares/auth';
+import UserService from '../../../services/user';
 
 const router = express.Router();
+const userService = Container.get<UserService>(UserService);
 
 router.post('/', async (req: Request, res: Response) => {
   try {
     const { username, email, password } = req.body;
-    const existingUser = await UsersCollection.where(
-      'username',
-      '==',
-      username,
-    ).get();
-
-    if (!existingUser.empty) {
-      throw new Error('Username already in use!');
-    }
-
-    const { uid } = await admin
-      .auth()
-      .createUser({ email, password, displayName: username });
-    const token = jwt.sign({ uid }, process.env.JWT_SECRET);
-    const uuidGeneratorResponse = await got.get(
-      `${process.env.UUID_GENERATOR_URL}/${username}`,
-    );
-
-    if (!uuidGeneratorResponse.body) {
-      throw new Error();
-    }
-
-    const uuidGeneratorObj: MinecraftUUID = JSON.parse(
-      uuidGeneratorResponse.body,
-    );
-    const minecraftUUID = uuidGeneratorObj.offlinesplitteduuid;
-
-    const user: User = {
-      uid,
+    const basicUserData: BasicUser = {
       username,
       email,
-      minecraftUUID,
-      paymentStatus: paymentStatusEnum.expired,
-      lastPaymentDate: null,
-      paymentExpirationDate: new Date(),
+      password,
     };
 
-    await UsersCollection.doc(uid).set(user);
-
-    req.user = user;
-    req.uid = uid;
-
-    res.cookie(process.env.COOKIE_NAME, token, {
-      httpOnly: true,
-      signed: true,
-    });
+    const user = await userService.signup(req, basicUserData, res);
 
     return res.status(200).send({ user });
   } catch (error) {
@@ -75,27 +34,7 @@ router.post('/login', async (req: Request, res: Response) => {
       throw new Error();
     }
 
-    const userRecord = await admin.auth().getUser(uid);
-    const userDocument = await UsersCollection.doc(uid).get();
-
-    if (!userDocument.exists) {
-      throw new Error('User not exists!');
-    }
-
-    const user: User = {
-      ...(userDocument.data() as User),
-      email: userRecord.email,
-    };
-
-    req.user = user;
-    req.uid = uid;
-
-    const token = jwt.sign({ uid }, process.env.JWT_SECRET);
-
-    res.cookie(process.env.COOKIE_NAME, token, {
-      httpOnly: true,
-      signed: true,
-    });
+    const user = await userService.login(req, uid, res);
 
     return res.status(200).send({ user });
   } catch (error) {
@@ -105,7 +44,9 @@ router.post('/login', async (req: Request, res: Response) => {
 
 router.get('/me', isAuthenticated, async (req: Request, res: Response) => {
   try {
-    return res.status(200).send(req.user);
+    const user = userService.getCurrentUser(req);
+
+    return res.status(200).send({ user });
   } catch (error) {
     return res.status(500).send(error);
   }
@@ -113,7 +54,7 @@ router.get('/me', isAuthenticated, async (req: Request, res: Response) => {
 
 router.patch('/me', isAuthenticated, async (req: Request, res: Response) => {
   const updates = Object.keys(req.body);
-  const allowedUpdates = ['username', 'email', 'password'];
+  const allowedUpdates = updateableUserFields;
   const isValidOperation = updates.every(update =>
     allowedUpdates.includes(update),
   );
@@ -126,51 +67,19 @@ router.patch('/me', isAuthenticated, async (req: Request, res: Response) => {
   try {
     updates.forEach(update => (userData[update] = req.body[update]));
 
-    await admin.auth().updateUser(req.uid, userData);
+    const user = userService.updateCurrentUser(req, userData);
 
-    delete userData['password'];
-
-    if (userData.hasOwnProperty('username')) {
-      const uuidGeneratorResponse = await got.get(
-        `${process.env.UUID_GENERATOR_URL}/${userData.username}`,
-      );
-
-      if (!uuidGeneratorResponse.body) {
-        throw new Error();
-      }
-
-      const minecraftUUID: MinecraftUUID = JSON.parse(
-        uuidGeneratorResponse.body,
-      );
-
-      userData.minecraftUUID = minecraftUUID.offlinesplitteduuid;
-    }
-
-    await UsersCollection.doc(req.uid).update(userData);
-
-    const user: User = {
-      ...req.user,
-      ...userData,
-    };
-
-    req.user = user;
-
-    res.status(200).send(user);
+    return res.status(200).send(user);
   } catch (error) {
-    res.status(500).send(error);
+    return res.status(500).send(error);
   }
 });
 
 router.delete('/me', isAuthenticated, async (req: Request, res: Response) => {
   try {
-    await admin.auth().deleteUser(req.uid);
-    await UsersCollection.doc(req.uid).delete();
+    await userService.deleteUser(req, res);
 
-    delete req.user;
-    delete req.uid;
-
-    res.clearCookie(process.env.COOKIE_NAME);
-    res.status(200).send();
+    return res.status(200).send();
   } catch (error) {
     return res.status(500).send(error);
   }
