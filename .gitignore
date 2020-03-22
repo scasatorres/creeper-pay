@@ -120,3 +120,4 @@ ecosystem.config.*
 # Other
 google-app-credentials.*
 .DS_Store
+logs/
