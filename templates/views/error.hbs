@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    >
+    <link
+      rel="shortcut icon"
+      href="/img/creeper-face.png"
+      type="image/x-icon"
+    >
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    >
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
+    >
+    <link
+      rel="stylesheet"
+      href="/css/shared.css"
+    >
+    <link
+      rel="stylesheet"
+      href="/css/error.css"
+    >
+    <title>Creeper Pay</title>
+  </head>
+
+  <body>
+    {{>header}}
+
+    <main class="error__container container valign-wrapper">
+      <div class="row">
+        <div
+          id="loader-wrapper"
+          class="col s12 m6 offset-m3 center-align"
+        >
+          {{>loader}}
+        </div>
+        <div
+          id="content"
+          class="error__text_container right col s12 m6 hide"
+        >
+          <p class="flow-text center-align">
+            <span class="error__title">{{ errorTitle }}</span>
+            <span class="error__message">{{ errorMessage }}</span>
+          </p>
+        </div>
+        <div class="col s12 m4 valign-wrapper">
+          <img
+            class="responsive-img"
+            src="/img/steve-error.png"
+            alt="Steve error"
+          >
+        </div>
+      </div>
+    </main>
+
+    {{>footer}}
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+    <script src="/js/shared.js"></script>
+  </body>
+
+</html>

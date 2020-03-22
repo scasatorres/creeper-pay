@@ -1,0 +1,47 @@
+{{#if unauthenticated}}
+<li>
+  <a
+    class="flow-text"
+    href="/views/auth/login"
+  >
+    Login
+  </a>
+</li>
+<li class="divider"></li>
+<li>
+  <a
+    class="flow-text"
+    href="/views/auth/signup"
+  >
+    Signup
+  </a>
+</li>
+{{/if}}
+{{#unless unauthenticated}}
+<li>
+  <a
+    class="flow-text"
+    href="/views/users/account"
+  >
+    Account
+  </a>
+</li>
+<li class="divider"></li>
+<li>
+  <a
+    class="flow-text"
+    href="/views/payment"
+  >
+    Payment
+  </a>
+</li>
+<li class="divider"></li>
+<li>
+  <a
+    class="flow-text"
+    href="/views/auth/logout"
+  >
+    Logout
+  </a>
+</li>
+{{/unless}}

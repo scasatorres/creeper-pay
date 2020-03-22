@@ -1,0 +1,39 @@
+<header class="header__container">
+  <nav>
+    <div class="nav-wrapper header__wrapper green darken-2">
+      <div class="row valign-wrapper">
+        <div class="col s4">
+          <div class="header__logo_container row">
+            <a
+              href="/"
+              class="brand-logo circle z-depth-5"
+            >
+            </a>
+            <div class="col offset-s2 hide-on-med-and-down">
+              <span class="flow-text">Creeper Pay</span>
+            </div>
+          </div>
+          <a
+            href="#"
+            data-target="mobile-menu"
+            class="sidenav-trigger"
+          >
+            <i class="material-icons">menu</i>
+          </a>
+        </div>
+        <div class="col s10">
+          <ul class="right hide-on-med-and-down">
+            {{>links}}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <ul
+    class="header__sidenav sidenav"
+    id="mobile-menu"
+  >
+    {{>links}}
+  </ul>
+</header>

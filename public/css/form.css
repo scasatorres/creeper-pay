@@ -1,0 +1,33 @@
+.form__container .row {
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.form__container .card {
+  background-color: rgba(255, 255, 255, 0.85);
+}
+
+.form__container .card-action {
+  border: 0;
+  background-color: transparent;
+  overflow: hidden;
+}
+
+.form__container .divider {
+  margin-bottom: 16px;
+}
+
+.form__container .card-title:first-child {
+  margin-bottom: 36px;
+}
+
+@media only screen and (max-width: 992px) {
+  .form__container .card-action {
+    text-align: center;
+  }
+
+  .form__container .card-action button {
+    width: 100%;
+    margin-bottom: 16px;
+  }
+}

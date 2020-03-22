@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    >
+    <link
+      rel="shortcut icon"
+      href="/img/creeper-face.png"
+      type="image/x-icon"
+    >
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    >
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
+    >
+    <link
+      rel="stylesheet"
+      href="/css/shared.css"
+    >
+    <link
+      rel="stylesheet"
+      href="/css/form.css"
+    >
+    <title>Creeper Pay</title>
+  </head>
+
+  <body>
+    {{>header}}
+
+    <main class="form__container container valign-wrapper">
+      <div class="row">
+        <div
+          id="loader-wrapper"
+          class="col s12 m6 offset-m3 center-align"
+        >
+          {{>loader}}
+        </div>
+        <div
+          id="content"
+          class="col s12 m10 offset-m1 hide"
+        >
+          <form id="account-form">
+            {{!-- Card component --}}
+            <div class="card z-depth-2">
+              <div class="card-content">
+                <span class="card-title center-align black-text">My account</span>
+                <div class="row">
+                  <span class="card-title black-text">General info</span>
+                  <div class="divider grey lighten-1"></div>
+                  {{!-- Username --}}
+                  <div class="input-field col s12 m6">
+                    <i class="material-icons prefix">account_circle</i>
+                    <input
+                      id="username"
+                      name="username"
+                      type="text"
+                      class="validate"
+                      required
+                      minlength="3"
+                    >
+                    <label
+                      class="active"
+                      for="username"
+                    >Username</label>
+                    <span
+                      id="username-helper-text"
+                      class="helper-text"
+                    >Remember! Must be the same as your minecraft username!</span>
+                  </div>
+                  {{!-- Email --}}
+                  <div class="input-field col s12 m6">
+                    <i class="material-icons prefix">alternate_email</i>
+                    <input
+                      id="email"
+                      name="email"
+                      type="email"
+                      class="validate"
+                      required
+                    >
+                    <label
+                      class="active"
+                      for="email"
+                    >Email</label>
+                    <span
+                      id="email-helper-text"
+                      class="helper-text"
+                    ></span>
+                  </div>
+                </div>
+                <div class="row">
+                  <span class="card-title black-text">Payment info</span>
+                  <div class="divider grey lighten-1"></div>
+                  {{!-- Last payment date --}}
+                  <div class="input-field col s12 m4">
+                    <i class="material-icons prefix">event</i>
+                    <input
+                      id="last-payment-date"
+                      name="lastPaymentDate"
+                      class="validate"
+                      disabled
+                    >
+                    <label
+                      class="active"
+                      for="lastPaymentDate"
+                    >Last payment date</label>
+                  </div>
+                  {{!-- Payment expiration date --}}
+                  <div class="input-field col s12 m4">
+                    <i class="material-icons prefix">event</i>
+                    <input
+                      id="payment-expiration-date"
+                      name="paymentExpirationDate"
+                      class="validate"
+                      disabled
+                    >
+                    <label
+                      class="active"
+                      for="paymentExpirationDate"
+                    >Payment expiration date</label>
+                  </div>
+                  {{!-- Payment status --}}
+                  <div class="input-field col s12 m4">
+                    <i class="material-icons prefix">payment</i>
+                    <input
+                      id="payment-status"
+                      name="paymentStatus"
+                      type="text"
+                      class="validate"
+                      disabled
+                    >
+                    <label
+                      class="active"
+                      for="paymentStatus"
+                    >Payment status</label>
+                  </div>
+                </div>
+                <div class="row">
+                  <span class="card-title black-text">Change password</span>
+                  <div class="divider grey lighten-1"></div>
+                  {{!-- New password --}}
+                  <div class="input-field col s12">
+                    <i class="material-icons prefix">vpn_key</i>
+                    <input
+                      id="password"
+                      name="password"
+                      type="password"
+                      class="validate"
+                      minlength="6"
+                    >
+                    <label
+                      class="active"
+                      for="password"
+                    >New password</label>
+                    <span
+                      id="password-helper-text"
+                      class="helper-text"
+                    ></span>
+                  </div>
+                </div>
+              </div>
+              <div class="card-action">
+                <button
+                  id="submit-button"
+                  name="submit-button"
+                  class="btn waves-effect waves-light green darken2 right"
+                  type="submit"
+                >
+                  Save changes
+                  <i class="material-icons right">save</i>
+                </button>
+                <button
+                  name="delete-account-button"
+                  class="btn waves-effect waves-light red darken2 left modal-trigger"
+                  type="click"
+                  data-target="confirmation-modal"
+                >
+                  Delete account
+                  <i class="material-icons right">delete</i>
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+    </main>
+
+    {{>footer}}
+
+    {{>confirmationModal
+    modalHeader='Delete account'
+    modalText='Are you sure you want to delete your account? Deleting your account is permanent.'
+    modalImg='/img/exploding-creeper.gif'
+    }}
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="http://cdn.date-fns.org/v1.9.0/date_fns.min.js"></script>
+
+    <script src="/js/utils.js"></script>
+    <script src="/js/shared.js"></script>
+    <script src="/js/account.js"></script>
+  </body>
+
+</html>
