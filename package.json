@@ -4,7 +4,7 @@
   "description": "A simple nodejs + express + braintree payment server.",
   "main": "index.js",
   "scripts": {
-    "start": "node dist/index.js",
+    "start": "npm run build:ts && node dist/index.js",
     "build": "npm i && npm run build:ts && npm start",
     "build:ts": "tsc",
     "dev": "env-cmd -f .env nodemon --inspect src/index.ts"
