@@ -3,6 +3,7 @@ import admin from 'firebase-admin';
 import * as jwt from 'jsonwebtoken';
 import { Request } from './../models/extended-request';
 import { UsersCollection, User } from '../models/user';
+import { logger } from '../config/winston';
 
 const isAuthenticated = async (
   req: Request,
@@ -36,7 +37,9 @@ const isAuthenticated = async (
     next();
   } catch (error) {
     res.clearCookie(process.env.COOKIE_NAME);
-    res.status(401).send(error);
+    res.status(401);
+    logger.error(req, req.uid, res, error);
+    return res.send(error);
   }
 };
 

@@ -2,6 +2,7 @@ import { Request } from '../../models/extended-request';
 import express, { Response } from 'express';
 import { authenticatedRedirection } from '../../middlewares/auth-redirection';
 import { isAuthenticated } from '../../middlewares/auth';
+import { logger } from '../../config/winston';
 
 const router = express.Router();
 
@@ -22,11 +23,11 @@ router.get(
 );
 
 router.get('/logout', isAuthenticated, (req: Request, res: Response) => {
-  delete req.user;
-  delete req.uid;
+  logger.info(req, req.uid, res);
 
   res.clearCookie(process.env.COOKIE_NAME);
-  return res.redirect('/');
+
+  res.redirect('/');
 });
 
 export { router as authRouter };

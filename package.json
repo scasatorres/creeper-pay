@@ -34,7 +34,9 @@
     "helmet": "^3.21.3",
     "jsonwebtoken": "^8.5.1",
     "typedi": "^0.8.0",
-    "validator": "^12.2.0"
+    "validator": "^12.2.0",
+    "winston": "^3.2.1",
+    "winston-daily-rotate-file": "^4.4.2"
   },
   "devDependencies": {
     "@types/braintree": "^2.22.0",
