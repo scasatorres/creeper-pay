@@ -34,7 +34,6 @@ document.addEventListener('DOMContentLoaded', async () => {
           try {
             showLoader();
 
-            await actions.order.capture();
             await httpClient.post('/payments/paypal-checkout', { orderID: data.orderID })
             M.toast({
               html: 'Payment success!', classes: 'green', completeCallback: () => {
