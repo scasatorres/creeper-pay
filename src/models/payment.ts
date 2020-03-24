@@ -7,5 +7,6 @@ export interface Payment {
   paymentExpirationDate: Date;
 }
 
-const paymentsCollection = db.collection('payments');
+const env = process.env.NODE_ENV || 'development';
+const paymentsCollection = db.collection(`payments_${env}`);
 export { paymentsCollection as PaymentsCollection };
