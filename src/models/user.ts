@@ -24,5 +24,6 @@ export enum paymentStatusEnum {
 
 export const updateableUserFields = ['username', 'email', 'password'];
 
-const usersCollection = db.collection('users');
+const env = process.env.NODE_ENV || 'development';
+const usersCollection = db.collection(`users_${env}`);
 export { usersCollection as UsersCollection };
