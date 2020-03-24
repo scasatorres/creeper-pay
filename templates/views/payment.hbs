@@ -59,82 +59,9 @@
                   <br>
                   <small>Current price: {{amount}} €</small>
                 </p>
-                <div class="row">
-                  {{!-- Credit card number --}}
-                  <div class="col s12 input-field">
-                    <i
-                      id="card-number-icon"
-                      class="material-icons prefix"
-                    >credit_card</i>
-                    <div
-                      id="card-number"
-                      class="hosted-field"
-                    ></div>
-                    <label
-                      class="active hosted-field--label"
-                      for="card-number"
-                    >Credit card number</label>
-                    <div
-                      id="card-number-helper-text"
-                      class="helper-text invisible"
-                    >
-                      Please enter a valid credit card number.
-                    </div>
-                  </div>
-                  {{!-- Expiration date --}}
-                  <div class="col s12 m6 input-field">
-                    <i
-                      id="expiration-date-icon"
-                      class="material-icons prefix"
-                    >date_range</i>
-                    <div
-                      id="expiration-date"
-                      class="hosted-field"
-                    ></div>
-                    <label
-                      class="active hosted-field--label"
-                      for="expiration-date"
-                    >Expiration date</label>
-                    <div
-                      id="expiration-date-helper-text"
-                      class="helper-text invisible"
-                    >
-                      Please enter a valid expiration date.
-                    </div>
-                  </div>
-                  {{!-- CVV --}}
-                  <div class="col s12 m6 input-field">
-                    <i
-                      id="cvv-icon"
-                      class="material-icons prefix"
-                    >lock</i>
-                    <div
-                      id="cvv"
-                      class="hosted-field"
-                    ></div>
-                    <label
-                      class="active hosted-field--label"
-                      for="cvv"
-                    >CVV</label>
-                    <div
-                      id="cvv-helper-text"
-                      class="helper-text invisible"
-                    >
-                      Please enter a valid CVV.
-                    </div>
-                  </div>
-                </div>
               </div>
               <div class="card-action">
-                <button
-                  id="submit-button"
-                  name="submit-button"
-                  type="submit"
-                  class="button btn waves-effect waves-light green darken2"
-                >Pay with credit card
-                </button>
-                <h6>or</h6>
-                <div id="paypal-button"></div>
+                <div id="paypal-button-container"></div>
               </div>
             </div>
           </form>
@@ -148,14 +75,11 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="https://js.braintreegateway.com/web/3.59.0/js/client.min.js"></script>
     <script src="https://js.braintreegateway.com/web/3.59.0/js/hosted-fields.min.js"></script>
-    <script
-      src="https://www.paypal.com/sdk/js?client-id=AapopOSYJ6-4A_T2s_x8IRV5gARUEXG9yTZygPlJ_fjQiss9x3d7S_SG2dB8Xb1cgUVo3G-fibmx1r80&currency=EUR&components=buttons,funding-eligibility"
-    ></script>
+    <script src="https://www.paypal.com/sdk/js?client-id={{clientId}}&currency=EUR&components=buttons"></script>
 
     <script src="/js/utils.js"></script>
     <script src="/js/shared.js"></script>
     <script src="/js/paypal.js"></script>
-    <script src="/js/payment.js"></script>
   </body>
 
 </html>

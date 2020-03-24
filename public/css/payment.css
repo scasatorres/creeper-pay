@@ -1,3 +1,7 @@
+.card-title {
+  margin-bottom: 0 !important;
+}
+
 .card-action {
   display: flex;
   flex-direction: column;
@@ -7,93 +11,4 @@
 .card-action button {
   min-width: 25%;
   margin-bottom: 0 !important;
-}
-
-.hosted-field {
-  margin-left: 3rem;
-  margin-bottom: 8px;
-  width: 92%;
-  width: calc(100% - 3rem);
-  border: none;
-  border-bottom: 1px solid #9e9e9e;
-  border-radius: 0;
-  outline: none;
-  height: 3rem;
-  padding: 0;
-}
-
-input.valid,
-.braintree-hosted-fields-valid,
-.braintree-hosted-fields-focused + .hosted-field--label {
-  color: #388e3c !important;
-}
-
-.hosted-field--label.label-float.filled {
-  color: initial !important;
-}
-
-input.invalid,
-.braintree-hosted-fields-invalid {
-  color: #f44336 !important;
-}
-
-.braintree-hosted-fields-valid,
-.braintree-hosted-fields-focused {
-  border-bottom: 1px solid #388e3c !important;
-  box-shadow: 0 1px 0 0 #388e3c !important;
-  transition: border 0.3s, -webkit-box-shadow 0.3s;
-  transition-property: box-shadow, border, -webkit-box-shadow;
-  transition-duration: 0.3s, 0.3s, 0.3s;
-  transition-timing-function: ease, ease, ease;
-  transition-delay: 0s, 0s, 0s;
-  transition: box-shadow 0.3s, border 0.3s;
-  transition-property: box-shadow, border, -webkit-box-shadow;
-  transition-duration: 0.3s, 0.3s, 0.3s;
-  transition-timing-function: ease, ease, ease;
-  transition-delay: 0s, 0s, 0s;
-  transition: box-shadow 0.3s, border 0.3s, -webkit-box-shadow 0.3s;
-  transition-property: box-shadow, border, -webkit-box-shadow;
-  transition-duration: 0.3s, 0.3s, 0.3s;
-  transition-timing-function: ease, ease, ease;
-  transition-delay: 0s, 0s, 0s;
-}
-
-.braintree-hosted-fields-invalid,
-.hosted-field.invalid {
-  border-bottom: 1px solid #f44336;
-  box-shadow: 0 1px 0 0 #f44336;
-  transition: border 0.3s, -webkit-box-shadow 0.3s;
-  transition-property: box-shadow, border, -webkit-box-shadow;
-  transition-duration: 0.3s, 0.3s, 0.3s;
-  transition-timing-function: ease, ease, ease;
-  transition-delay: 0s, 0s, 0s;
-  transition: box-shadow 0.3s, border 0.3s;
-  transition-property: box-shadow, border, -webkit-box-shadow;
-  transition-duration: 0.3s, 0.3s, 0.3s;
-  transition-timing-function: ease, ease, ease;
-  transition-delay: 0s, 0s, 0s;
-  transition: box-shadow 0.3s, border 0.3s, -webkit-box-shadow 0.3s;
-  transition-property: box-shadow, border, -webkit-box-shadow;
-  transition-duration: 0.3s, 0.3s, 0.3s;
-  transition-timing-function: ease, ease, ease;
-  transition-delay: 0s, 0s, 0s;
-}
-
-.helper-text.invalid {
-  color: #f44336;
-  transition: border 0.3s, -webkit-box-shadow 0.3s;
-  transition-property: box-shadow, border, -webkit-box-shadow;
-  transition-duration: 0.3s, 0.3s, 0.3s;
-  transition-timing-function: ease, ease, ease;
-  transition-delay: 0s, 0s, 0s;
-  transition: box-shadow 0.3s, border 0.3s;
-  transition-property: box-shadow, border, -webkit-box-shadow;
-  transition-duration: 0.3s, 0.3s, 0.3s;
-  transition-timing-function: ease, ease, ease;
-  transition-delay: 0s, 0s, 0s;
-  transition: box-shadow 0.3s, border 0.3s, -webkit-box-shadow 0.3s;
-  transition-property: box-shadow, border, -webkit-box-shadow;
-  transition-duration: 0.3s, 0.3s, 0.3s;
-  transition-timing-function: ease, ease, ease;
-  transition-delay: 0s, 0s, 0s;
 }

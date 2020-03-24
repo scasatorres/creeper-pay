@@ -4,7 +4,6 @@ import * as checkoutNodeJssdk from '@paypal/checkout-server-sdk';
 import { Payment, PaymentsCollection } from './../models/payment';
 import { paymentStatusEnum, User, UsersCollection } from './../models/user';
 import { Request } from './../models/extended-request';
-import { gateway } from '../config/braintree';
 import WhitelistService from './whitelist';
 import { payPalClient } from '../config/paypal';
 
@@ -15,26 +14,10 @@ export default class PaymentService {
     return process.env.PAYMENT_AMOUNT || '3.50';
   };
 
-  public getClientToken = async () => {
-    const { clientToken } = await gateway.clientToken.generate({});
-
-    return clientToken;
-  };
-
-  public checkout = async (req: Request, paymentToken: string) => {
-    const amount = process.env.PAYMENT_AMOUNT;
-    const result = await gateway.transaction.sale({
-      amount,
-      paymentMethodNonce: paymentToken,
-    });
-
-    if (!result.success) {
-      throw new Error(result.message);
-    }
-
-    const transactionId = result.transaction.id;
-
-    await this._updatePaymentData(req, transactionId);
+  public getFundingSources = () => {
+    const fundingSources = process.env.PAYMENT_FUNDING_SOURCES || 'PAYPAL';
+    const splittedFundingSources = fundingSources.split(',');
+    return splittedFundingSources;
   };
 
   public paypalCheckout = async (req: Request, orderId: string) => {
