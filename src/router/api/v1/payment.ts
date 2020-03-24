@@ -25,30 +25,15 @@ router.get(
   },
 );
 
-router.get('/token', isAuthenticated, async (req: Request, res: Response) => {
-  try {
-    const clientToken = await paymentService.getClientToken();
-
-    logger.info(req, req.uid, res);
-    return res.status(200).send({ clientToken });
-  } catch (error) {
-    res.status(500);
-    logger.error(req, req.uid, res, error);
-    return res.send(error);
-  }
-});
-
-router.post(
-  '/checkout',
+router.get(
+  '/funding-sources',
   isAuthenticated,
   async (req: Request, res: Response) => {
     try {
-      const { paymentToken } = req.body;
-
-      await paymentService.checkout(req, paymentToken);
+      const fundingSources = paymentService.getFundingSources();
 
       logger.info(req, req.uid, res);
-      return res.status(200).send();
+      return res.status(200).send({ fundingSources });
     } catch (error) {
       res.status(500);
       logger.error(req, req.uid, res, error);
